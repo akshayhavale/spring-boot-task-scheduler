@@ -2,6 +2,8 @@ package com.java.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -12,7 +14,7 @@ import com.java.repository.UserRepository;
 @Service
 public class UserServiceImpl implements UserService {
 
-	private final int count = 0;
+	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Autowired
 	private UserRepository repository;
@@ -27,23 +29,16 @@ public class UserServiceImpl implements UserService {
 	 * the contract of task scheduling method is the method should not accept any
 	 * arguments and it should not return anything
 	 */
-	@Scheduled(cron = "*/30 * * * * *")
+	@Scheduled(cron = "*/10 * * * * *")
 	public void createUserByScheduledTime() {
 
-		
-		int counter = increment(count);
-		
 		User user = new User();
-		user.setName("AKSHAY"+counter);
+		user.setName("AKSHAY" + System.currentTimeMillis());
 
 		repository.save(user);
 
-		System.out.println(user);
+		logger.info("The inserted user is" + user);
 
-	}
-
-	public static int increment(int count) {
-		return count++;
 	}
 
 }
